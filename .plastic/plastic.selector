@@ -1,4 +1,0 @@
-repository "OceanAdventure2@EnigmaCreations@cloud"
-  path "/"
-    br "/main"
-    co "/main"
