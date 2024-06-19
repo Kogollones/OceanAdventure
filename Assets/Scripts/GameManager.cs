@@ -8,9 +8,6 @@ public class GameManager : MonoBehaviour
     public bool hasMonthlyPass = false;
     public int playerPoints;
     public int playerCoins;
-    public List<Quest> activeQuests;
-    public List<Item> inventory;
-    public List<Skill> skills;
     public int currentLevel;
     public int experience;
     public int health;
@@ -62,7 +59,7 @@ public class GameManager : MonoBehaviour
 
     private int GetExperienceForNextLevel()
     {
-        return currentLevel * 100; // Example calculation
+        return currentLevel * 100;
     }
 
     private void LevelUp()
@@ -83,17 +80,6 @@ public class GameManager : MonoBehaviour
 
     private void Die()
     {
-        // Implement player death logic
         Debug.Log("Player has died.");
-    }
-
-    public void AddItem(Item item)
-    {
-        inventory.Add(item);
-    }
-
-    public void RemoveItem(Item item)
-    {
-        inventory.Remove(item);
     }
 }

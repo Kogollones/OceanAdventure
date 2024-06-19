@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -6,8 +5,8 @@ public class Player : MonoBehaviour
 {
     public string playerName;
     public Clan clan;
-    public List<Quest> activeQuests;
-    public List<Item> inventory;
+    public List<Quest> activeQuests = new List<Quest>();
+    public List<Item> inventory = new List<Item>();
 
     public void JoinClan(Clan newClan)
     {
