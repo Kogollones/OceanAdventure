@@ -1,9 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    public Text scoreText;
+	public TextMeshProUGUI scoreText;
     public Image healthBar;
 
     private int score = 0;
@@ -14,6 +15,18 @@ public class UIManager : MonoBehaviour
         UpdateScore();
         UpdateHealthBar();
     }
+
+    public void UpdateScore()
+{
+    if (scoreText != null)
+    {
+        scoreText.SetText("Score: {0}", score);
+    }
+    else
+    {
+        Debug.LogError("UIManager: ScoreText is not assigned.");
+    }
+}
 
     public void IncreaseScore(int amount)
     {
@@ -28,13 +41,15 @@ public class UIManager : MonoBehaviour
         UpdateHealthBar();
     }
 
-    void UpdateScore()
-    {
-        scoreText.text = "Score: " + score;
-    }
-
     void UpdateHealthBar()
     {
-        healthBar.fillAmount = health;
+        if (healthBar != null)
+        {
+            healthBar.fillAmount = health;
+        }
+        else
+        {
+            Debug.LogError("UIManager: HealthBar is not assigned.");
+        }
     }
 }

@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 public class BoatDurability : MonoBehaviour

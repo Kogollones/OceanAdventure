@@ -10,6 +10,9 @@ public class SimpleBuoyancy : MonoBehaviour
     public float downForce = 4.0f;
     public bool dynamicWaterLevel = true;  // Option to dynamically set water level
 
+    public float buoyancyForce = 10.0f;  // New buoyancy force
+    public float dampingFactor = 0.99f;  // New damping factor
+
     private Rigidbody rb;
 
     void Start()
@@ -26,6 +29,11 @@ public class SimpleBuoyancy : MonoBehaviour
 
     void FixedUpdate()
     {
+        ApplyBuoyancy();
+    }
+
+    private void ApplyBuoyancy()
+    {
         Vector3 actionPoint = transform.position;
         float forceFactor = 1.0f - ((actionPoint.y - waterLevel) / floatThreshold);
 
@@ -34,6 +42,18 @@ public class SimpleBuoyancy : MonoBehaviour
             Vector3 uplift = -Physics.gravity * (forceFactor - rb.velocity.y * waterDensity);
             uplift += new Vector3(0, downForce, 0);
             rb.AddForceAtPosition(uplift, actionPoint);
+            
+            // Apply additional buoyancy and damping
+            if (transform.position.y < waterLevel)
+            {
+                float displacementMultiplier = Mathf.Clamp01((waterLevel - transform.position.y) / waterLevel);
+                Vector3 upwardForce = Vector3.up * buoyancyForce * displacementMultiplier;
+                rb.AddForce(upwardForce, ForceMode.Acceleration);
+                
+                // Apply damping to simulate water resistance
+                rb.velocity *= dampingFactor;
+                rb.angularVelocity *= dampingFactor;
+            }
         }
     }
 

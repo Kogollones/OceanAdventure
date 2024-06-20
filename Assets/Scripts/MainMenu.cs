@@ -12,8 +12,8 @@ public class MainMenuManager : MonoBehaviour
     private void Awake()
     {
         inputActions = new InputActions();
-        inputActions.UI.Click.performed += ctx => OnClick();
-        inputActions.UI.Navigate.performed += ctx => OnNavigate(ctx.ReadValue<Vector2>());
+        inputActions.UI.Submit.performed += ctx => OnSubmit();
+        inputActions.UI.Move.performed += ctx => OnMove(ctx.ReadValue<Vector2>());
     }
 
     private void OnEnable()
@@ -31,14 +31,14 @@ public class MainMenuManager : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
-    private void OnClick()
+    private void OnSubmit()
     {
-        // Handle click
+        // Handle click/submit
     }
 
-    private void OnNavigate(Vector2 direction)
+    private void OnMove(Vector2 direction)
     {
-        // Handle navigation
+        // Handle navigation/move
     }
 
     public void PlayGame()

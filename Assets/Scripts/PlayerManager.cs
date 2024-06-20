@@ -15,6 +15,9 @@ public class PlayerManager : MonoBehaviourPun
         {
             // Initialize player ship
             Debug.Log("PlayerManager: Initialized player ship for local player.");
+
+            // Set the camera to follow the player ship
+            CameraController.CameraController.Instance.FollowTarget = transform;
         }
         else
         {

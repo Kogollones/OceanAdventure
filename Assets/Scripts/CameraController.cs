@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace CameraController
 {
-    public class CameraController : MonoBehaviour
+    public class CameraController : MonoBehaviour, InputActions.IBoatActions
     {
         public static CameraController Instance = null;
 
@@ -18,8 +16,8 @@ namespace CameraController
         public float minZoomInFOV = 30f;
         public float smoothSpeed = 0.125f;  // Smoothing speed for camera movement
 
-        // USED WITH EDITOR!
-        public bool ShowHelp = false;
+        private InputActions inputActions;
+        private Vector2 zoomInput;
 
         private void Awake()
         {
@@ -27,6 +25,15 @@ namespace CameraController
                 Instance = this;
             else
                 Destroy(gameObject);
+
+            inputActions = new InputActions();
+            inputActions.Boat.SetCallbacks(this);
+            inputActions.Enable();
+        }
+
+        private void OnDestroy()
+        {
+            inputActions.Disable();
         }
 
         private void Start()
@@ -52,27 +59,39 @@ namespace CameraController
                 Vector3 smoothedPosition = Vector3.Lerp(Camera_ToUse.transform.position, desiredPosition, smoothSpeed);
                 Camera_ToUse.transform.position = smoothedPosition;
 
-                Camera_ToUse.transform.rotation = Quaternion.Euler(45f, 0f, 0f);
+                Camera_ToUse.transform.LookAt(FollowTarget);
             }
-
-            HandleZoom();
         }
 
-        private void HandleZoom()
+        public void OnZoom(InputAction.CallbackContext context)
         {
-            var mouse = Mouse.current;
-            if (mouse != null)
+            float scrollValue = context.ReadValue<Vector2>().y;
+
+            if (scrollValue > 0f)
             {
-                if (mouse.scroll.y.ReadValue() > 0f)
-                {
-                    Camera_ToUse.fieldOfView = Mathf.Clamp(Camera_ToUse.fieldOfView - Zoom_SpeedValue() * Time.deltaTime, minZoomInFOV, maxZoomOutFOV);
-                }
-                else if (mouse.scroll.y.ReadValue() < 0f)
-                {
-                    Camera_ToUse.fieldOfView = Mathf.Clamp(Camera_ToUse.fieldOfView + Zoom_SpeedValue() * Time.deltaTime, minZoomInFOV, maxZoomOutFOV);
-                }
+                Camera_ToUse.fieldOfView = Mathf.Clamp(Camera_ToUse.fieldOfView - Zoom_SpeedValue() * Time.deltaTime, minZoomInFOV, maxZoomOutFOV);
+            }
+            else if (scrollValue < 0f)
+            {
+                Camera_ToUse.fieldOfView = Mathf.Clamp(Camera_ToUse.fieldOfView + Zoom_SpeedValue() * Time.deltaTime, minZoomInFOV, maxZoomOutFOV);
             }
         }
+
+        // Implementing the required methods from the IBoatActions interface
+        public void OnMoveForward(InputAction.CallbackContext context) { }
+        public void OnTurnLeft(InputAction.CallbackContext context) { }
+        public void OnTurnRight(InputAction.CallbackContext context) { }
+        public void OnMove(InputAction.CallbackContext context) { }
+        public void OnLook(InputAction.CallbackContext context) { }
+        public void OnActionButton1(InputAction.CallbackContext context) { }
+        public void OnActionButton2(InputAction.CallbackContext context) { }
+        public void OnActionButton3(InputAction.CallbackContext context) { }
+        public void OnActionButton4(InputAction.CallbackContext context) { }
+        public void OnActionButton5(InputAction.CallbackContext context) { }
+        public void OnActionButton6(InputAction.CallbackContext context) { }
+        public void OnActionButton7(InputAction.CallbackContext context) { }
+        public void OnRotate(InputAction.CallbackContext context) { }
+        public void OnFire(InputAction.CallbackContext context) { }
 
         protected float Move_SpeedValue()
         {
